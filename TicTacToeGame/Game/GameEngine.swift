@@ -25,11 +25,14 @@ struct Move: Equatable {
 enum GameEngineError: Error, LocalizedError, Equatable {
     
     case firstMoveNeedsToBeAnX
+    case moveTypesMustBeAlternating
     
     var errorDescription: String? {
         switch self {
         case .firstMoveNeedsToBeAnX:
             return "First move need to be an x."
+        case .moveTypesMustBeAlternating:
+            return "Move types must be alternating."
         }
     }
 }
@@ -43,6 +46,10 @@ class GameEngine {
         
         if moves.isEmpty, move.moveType == .o {
             return GameEngineError.firstMoveNeedsToBeAnX
+        }
+        
+        guard move.moveType == getNextMoveType() else {
+            return GameEngineError.moveTypesMustBeAlternating
         }
 
         moves.append(move)

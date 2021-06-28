@@ -45,4 +45,17 @@ class GameEngineTests: XCTestCase {
         XCTAssertTrue(nextMoveType == .o)
     }
 
+    func testAlternatingMoveTypes() {
+        let gameEngine = GameEngine()
+        
+        var move = Move(moveType: .x, coordinates: BoardCoordinates(x: 0, y: 0))
+        gameEngine.addMove(move: move)
+        
+        move = Move(moveType: .x, coordinates: BoardCoordinates(x: 0, y: 1))
+        let result = gameEngine.addMove(move: move)
+        guard let error = result as? GameEngineError else {
+            XCTFail("It should return an error here."); return
+        }
+        XCTAssertTrue(error == GameEngineError.moveTypesMustBeAlternating)
+    }
 }
