@@ -174,4 +174,84 @@ class GameEngineTests: XCTestCase {
         let gameResult = GameResult.won(move)
         XCTAssertTrue(gameEngine.gameState == .ended(gameResult))
     }
+    
+    // testing adding a move after game ended.
+    func testGameEnded() {
+        
+        let gameEngine = GameEngine()
+        var move: Move
+        
+        move = Move(moveType: .x, coordinates: BoardCoordinates(x: 2, y: 0))
+        gameEngine.addMove(move: move)
+        
+        move = Move(moveType: .o, coordinates: BoardCoordinates(x: 0, y: 1))
+        gameEngine.addMove(move: move)
+        
+        move = Move(moveType: .x, coordinates: BoardCoordinates(x: 1, y: 1))
+        gameEngine.addMove(move: move)
+        
+        move = Move(moveType: .o, coordinates: BoardCoordinates(x: 2, y: 1))
+        gameEngine.addMove(move: move)
+        
+        move = Move(moveType: .x, coordinates: BoardCoordinates(x: 0, y: 2))
+        gameEngine.addMove(move: move)
+        
+        
+        // this should fail
+        move = Move(moveType: gameEngine.getNextMoveType(), coordinates: BoardCoordinates(x: 1, y: 2))
+        let result = gameEngine.addMove(move: move)
+        
+        guard let error = result as? GameEngineError else {
+            XCTFail("It should return an error here."); return
+        }
+        let gameResult = GameResult.won(Move(moveType: .x, coordinates: BoardCoordinates(x: 0, y: 2)))
+        XCTAssertTrue(error == GameEngineError.gameEnded(gameResult))
+    }
+    
+    // testing adding a move after game ended.
+    func testGameEndedDrawCase() {
+        
+        let gameEngine = GameEngine()
+        var move: Move
+        
+        move = Move(moveType: .x, coordinates: BoardCoordinates(x: 0, y: 0))
+        gameEngine.addMove(move: move)
+        
+        move = Move(moveType: .o, coordinates: BoardCoordinates(x: 1, y: 0))
+        gameEngine.addMove(move: move)
+        
+        move = Move(moveType: .x, coordinates: BoardCoordinates(x: 2, y: 0))
+        gameEngine.addMove(move: move)
+        
+        
+        move = Move(moveType: .o, coordinates: BoardCoordinates(x: 1, y: 1))
+        gameEngine.addMove(move: move)
+        
+        move = Move(moveType: .x, coordinates: BoardCoordinates(x: 0, y: 1))
+        gameEngine.addMove(move: move)
+        
+        move = Move(moveType: .o, coordinates: BoardCoordinates(x: 0, y: 2))
+        gameEngine.addMove(move: move)
+        
+        
+        move = Move(moveType: .x, coordinates: BoardCoordinates(x: 1, y: 2))
+        gameEngine.addMove(move: move)
+        
+        move = Move(moveType: .o, coordinates: BoardCoordinates(x: 2, y: 2))
+        gameEngine.addMove(move: move)
+        
+        move = Move(moveType: .x, coordinates: BoardCoordinates(x: 2, y: 1))
+        gameEngine.addMove(move: move)
+        
+        
+        // this should fail
+        /*move = Move(moveType: gameEngine.getNextMoveType(), coordinates: BoardCoordinates(x: 1, y: 2))
+        let result = gameEngine.addMove(move: move)
+        
+        guard let error = result as? GameEngineError else {
+            XCTFail("It should return an error here."); return
+        }*/
+        let gameResult = GameResult.draw
+        XCTAssertTrue(gameEngine.gameState == GameState.ended(gameResult))
+    }
 }
