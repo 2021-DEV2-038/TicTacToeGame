@@ -25,12 +25,15 @@ struct Move: Equatable {
 enum GameEngineError: Error, LocalizedError, Equatable {
     
     case firstMoveNeedsToBeAnX
+    case occupiedSlot
     case moveTypesMustBeAlternating
     
     var errorDescription: String? {
         switch self {
         case .firstMoveNeedsToBeAnX:
             return "First move need to be an x."
+        case .occupiedSlot:
+            return "That slot is occupied, please select another one."
         case .moveTypesMustBeAlternating:
             return "Move types must be alternating."
         }
@@ -41,6 +44,12 @@ class GameEngine {
     
     private var moves = [Move]()
     
+    private var occupied = [BoardCoordinates: Move]()
+    
+    private func isOccupied(coordinates: BoardCoordinates) -> Bool {
+        return occupied[coordinates] != nil
+    }
+    
     @discardableResult
     func addMove(move: Move) -> Error? {
         
@@ -48,11 +57,16 @@ class GameEngine {
             return GameEngineError.firstMoveNeedsToBeAnX
         }
         
+        guard !isOccupied(coordinates: move.coordinates) else {
+            return GameEngineError.occupiedSlot
+        }
+        
         guard move.moveType == getNextMoveType() else {
             return GameEngineError.moveTypesMustBeAlternating
         }
 
         moves.append(move)
+        occupied[move.coordinates] = move
         
         return nil
     }

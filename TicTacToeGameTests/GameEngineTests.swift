@@ -58,4 +58,19 @@ class GameEngineTests: XCTestCase {
         }
         XCTAssertTrue(error == GameEngineError.moveTypesMustBeAlternating)
     }
+    
+    func testOccupiedSlot() {
+        let gameEngine = GameEngine()
+        
+        var move = Move(moveType: gameEngine.getNextMoveType(), coordinates: BoardCoordinates(x: 0, y: 0))
+        gameEngine.addMove(move: move)
+        
+        move = Move(moveType: gameEngine.getNextMoveType(), coordinates: BoardCoordinates(x: 0, y: 0))
+        let result = gameEngine.addMove(move: move)
+        guard let error = result as? GameEngineError else {
+            XCTFail("It should return an error here."); return
+        }
+        XCTAssertTrue(error == GameEngineError.occupiedSlot)
+        
+    }
 }
