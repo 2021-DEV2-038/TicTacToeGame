@@ -49,4 +49,13 @@ class GameEngine {
         return nil
     }
     
+    func getNextMoveType() -> MoveType {
+        
+        if let lastMove = moves.last, lastMove.moveType == .x {
+            return .o
+        }
+        
+        return MoveType.x
+    }
+    
 }

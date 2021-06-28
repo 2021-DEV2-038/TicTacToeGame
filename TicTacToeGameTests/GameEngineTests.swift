@@ -19,5 +19,18 @@ class GameEngineTests: XCTestCase {
         }
         XCTAssertTrue(error == GameEngineError.firstMoveNeedsToBeAnX)
     }
+    
+    func testSuccessfullAddMoveShouldReturnNil() {
+        let gameEngine = GameEngine()
+        let move = Move(moveType: .x, coordinates: BoardCoordinates(x: 0, y: 0))
+        let result = gameEngine.addMove(move: move)
+        XCTAssertTrue(result == nil)
+    }
+    
+    func testGetNextMoveType() {
+        let gameEngine = GameEngine()
+        let nextMoveType = gameEngine.getNextMoveType()
+        XCTAssertTrue(nextMoveType == .x)
+    }
 
 }
