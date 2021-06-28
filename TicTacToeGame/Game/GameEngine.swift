@@ -123,12 +123,27 @@ class GameEngine {
         return moves.compactMap({ $0 })
     }
     
+    private func getWholeColumn(x: Int) -> [Move] {
+        var moves = [Move?]()
+        
+        for y in 0..<GameEngine.boardSize {
+            moves.append(occupied[BoardCoordinates(x: x, y: y)])
+        }
+        
+        return moves.compactMap({ $0 })
+    }
+    
     private func isWinnerMove() -> Bool {
         
         guard let lastMove = moves.last else { return false }
         
         // if last move's row all the same, then last move is winner
         if getWholeRow(y: lastMove.coordinates.y).filter({ $0.moveType == lastMove.moveType }).count == GameEngine.boardSize {
+            return true
+        }
+        
+        // if last move's column all the same, then last move is winner
+        if getWholeColumn(x: lastMove.coordinates.x).filter({ $0.moveType == lastMove.moveType }).count == GameEngine.boardSize {
             return true
         }
         

@@ -102,4 +102,28 @@ class GameEngineTests: XCTestCase {
         let gameResult = GameResult.won(move)
         XCTAssertTrue(gameEngine.gameState == .ended(gameResult))
     }
+    
+    func testIsWinnerMoveColumn() {
+        
+        let gameEngine = GameEngine()
+        var move: Move
+        
+        move = Move(moveType: .x, coordinates: BoardCoordinates(x: 0, y: 0))
+        gameEngine.addMove(move: move)
+        
+        move = Move(moveType: .o, coordinates: BoardCoordinates(x: 1, y: 0))
+        gameEngine.addMove(move: move)
+        
+        move = Move(moveType: .x, coordinates: BoardCoordinates(x: 0, y: 1))
+        gameEngine.addMove(move: move)
+        
+        move = Move(moveType: .o, coordinates: BoardCoordinates(x: 1, y: 1))
+        gameEngine.addMove(move: move)
+        
+        move = Move(moveType: .x, coordinates: BoardCoordinates(x: 0, y: 2))
+        gameEngine.addMove(move: move)
+        
+        let gameResult = GameResult.won(move)
+        XCTAssertTrue(gameEngine.gameState == .ended(gameResult))
+    }
 }
