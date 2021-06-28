@@ -2,7 +2,7 @@
 //  GameEngineTests.swift
 //  TicTacToeGameTests
 //
-//  Created by Adem Özgür on 28.06.2021.
+//  Created by Anonymous on 28.06.2021.
 //
 
 import XCTest

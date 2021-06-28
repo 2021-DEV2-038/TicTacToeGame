@@ -2,7 +2,7 @@
 //  GameEngine.swift
 //  TicTacToeGame
 //
-//  Created by Adem Özgür on 28.06.2021.
+//  Created by Anonymous on 28.06.2021.
 //
 
 import Foundation
@@ -184,5 +184,11 @@ class GameEngine {
         }
         
         return false
+    }
+    
+    func restart() {
+        moves.removeAll()
+        occupied.removeAll()
+        gameState = .inProgress
     }
 }
