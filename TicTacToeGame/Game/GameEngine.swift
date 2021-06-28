@@ -22,11 +22,23 @@ struct Move: Equatable {
     var coordinates: BoardCoordinates
 }
 
+enum GameResult: Equatable {
+    case draw
+    // keeping a copy of last move won the game
+    case ended(Move)
+}
+
+enum GameState: Equatable {
+    case inProgress
+    case ended(GameResult)
+}
+
 enum GameEngineError: Error, LocalizedError, Equatable {
     
     case firstMoveNeedsToBeAnX
     case occupiedSlot
     case moveTypesMustBeAlternating
+    case gameEnded(GameResult)
     
     var errorDescription: String? {
         switch self {
@@ -36,11 +48,17 @@ enum GameEngineError: Error, LocalizedError, Equatable {
             return "That slot is occupied, please select another one."
         case .moveTypesMustBeAlternating:
             return "Move types must be alternating."
+        case .gameEnded:
+            return "Game ended, please restart the game."
         }
     }
 }
 
 class GameEngine {
+    
+    static let boardSize = 3
+    
+    private(set) var gameState: GameState = .inProgress
     
     private var moves = [Move]()
     
@@ -52,6 +70,13 @@ class GameEngine {
     
     @discardableResult
     func addMove(move: Move) -> Error? {
+        
+        switch gameState {
+        case .ended(let result):
+            return GameEngineError.gameEnded(result)
+        default:
+            break
+        }
         
         if moves.isEmpty, move.moveType == .o {
             return GameEngineError.firstMoveNeedsToBeAnX
@@ -68,6 +93,14 @@ class GameEngine {
         moves.append(move)
         occupied[move.coordinates] = move
         
+        if isWinnerMove() {
+            gameState = .ended(GameResult.ended(move))
+        } else {
+            if occupied.count == GameEngine.boardSize * GameEngine.boardSize {
+                gameState = .ended(GameResult.draw)
+            }
+        }
+        
         return nil
     }
     
@@ -80,4 +113,10 @@ class GameEngine {
         return MoveType.x
     }
     
+    private func isWinnerMove() -> Bool {
+        
+        guard !moves.isEmpty else { return false }
+        
+        return false
+    }
 }

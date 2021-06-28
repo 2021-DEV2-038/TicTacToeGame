@@ -73,4 +73,9 @@ class GameEngineTests: XCTestCase {
         XCTAssertTrue(error == GameEngineError.occupiedSlot)
         
     }
+    
+    func testGameStateAtTheBeginning() {
+        let gameEngine = GameEngine()
+        XCTAssertTrue(gameEngine.gameState == .inProgress)
+    }
 }
