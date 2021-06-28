@@ -143,6 +143,18 @@ class GameEngine {
         return moves.compactMap({ $0 })
     }
     
+    private func getSecondDiagonal() -> [Move] {
+        var moves = [Move?]()
+        
+        for i in 0..<GameEngine.boardSize {
+            
+            moves.append(occupied[BoardCoordinates(x: GameEngine.boardSize - 1 - i, y: i)])
+            
+        }
+        
+        return moves.compactMap({ $0 })
+    }
+    
     private func isWinnerMove() -> Bool {
         
         guard let lastMove = moves.last else { return false }
@@ -164,6 +176,10 @@ class GameEngine {
         
         // if last move's column all the same, then last move is winner
         if getFirstDiagonal().filter({ $0.moveType == lastMove.moveType }).count == GameEngine.boardSize {
+            return true
+        }
+        
+        if getSecondDiagonal().filter({ $0.moveType == lastMove.moveType }).count == GameEngine.boardSize {
             return true
         }
         
