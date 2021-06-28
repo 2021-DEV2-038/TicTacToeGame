@@ -38,6 +38,7 @@ class GameEngine {
     
     private var moves = [Move]()
     
+    @discardableResult
     func addMove(move: Move) -> Error? {
         
         if moves.isEmpty, move.moveType == .o {

@@ -32,5 +32,17 @@ class GameEngineTests: XCTestCase {
         let nextMoveType = gameEngine.getNextMoveType()
         XCTAssertTrue(nextMoveType == .x)
     }
+    
+    func getSecondMoveType() {
+        
+        let gameEngine = GameEngine()
+        
+        var nextMoveType = gameEngine.getNextMoveType()
+        let move = Move(moveType: nextMoveType, coordinates: BoardCoordinates(x: 0, y: 0))
+        gameEngine.addMove(move: move)
+        
+        nextMoveType = gameEngine.getNextMoveType()
+        XCTAssertTrue(nextMoveType == .o)
+    }
 
 }
