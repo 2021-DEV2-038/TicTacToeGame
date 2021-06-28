@@ -133,6 +133,16 @@ class GameEngine {
         return moves.compactMap({ $0 })
     }
     
+    private func getFirstDiagonal() -> [Move] {
+        var moves = [Move?]()
+        
+        for i in 0..<GameEngine.boardSize {
+            moves.append(occupied[BoardCoordinates(x: i, y: i)])
+        }
+        
+        return moves.compactMap({ $0 })
+    }
+    
     private func isWinnerMove() -> Bool {
         
         guard let lastMove = moves.last else { return false }
@@ -144,6 +154,16 @@ class GameEngine {
         
         // if last move's column all the same, then last move is winner
         if getWholeColumn(x: lastMove.coordinates.x).filter({ $0.moveType == lastMove.moveType }).count == GameEngine.boardSize {
+            return true
+        }
+        
+        // is it on diagonal?
+        guard lastMove.coordinates.x == lastMove.coordinates.y || (lastMove.coordinates.x + lastMove.coordinates.y) == GameEngine.boardSize - 1 else {
+            return false
+        }
+        
+        // if last move's column all the same, then last move is winner
+        if getFirstDiagonal().filter({ $0.moveType == lastMove.moveType }).count == GameEngine.boardSize {
             return true
         }
         
