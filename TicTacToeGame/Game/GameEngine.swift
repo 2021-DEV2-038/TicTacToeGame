@@ -25,7 +25,7 @@ struct Move: Equatable {
 enum GameResult: Equatable {
     case draw
     // keeping a copy of last move won the game
-    case ended(Move)
+    case won(Move)
 }
 
 enum GameState: Equatable {
@@ -94,7 +94,7 @@ class GameEngine {
         occupied[move.coordinates] = move
         
         if isWinnerMove() {
-            gameState = .ended(GameResult.ended(move))
+            gameState = .ended(GameResult.won(move))
         } else {
             if occupied.count == GameEngine.boardSize * GameEngine.boardSize {
                 gameState = .ended(GameResult.draw)
@@ -113,9 +113,24 @@ class GameEngine {
         return MoveType.x
     }
     
+    private func getWholeRow(y: Int) -> [Move] {
+        var moves = [Move?]()
+        
+        for x in 0..<GameEngine.boardSize {
+            moves.append(occupied[BoardCoordinates(x: x, y: y)])
+        }
+        
+        return moves.compactMap({ $0 })
+    }
+    
     private func isWinnerMove() -> Bool {
         
-        guard !moves.isEmpty else { return false }
+        guard let lastMove = moves.last else { return false }
+        
+        // if last move's row all the same, then last move is winner
+        if getWholeRow(y: lastMove.coordinates.y).filter({ $0.moveType == lastMove.moveType }).count == GameEngine.boardSize {
+            return true
+        }
         
         return false
     }
